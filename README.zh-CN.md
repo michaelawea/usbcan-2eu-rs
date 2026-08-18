@@ -32,7 +32,7 @@ cargo build --release
 ./target/release/usbcan2eu send 123#DEADBEEF --bitrate 250k
 ```
 
-需要 macOS 11 以上、Rust 1.75 以上。Apple Silicon 和 Intel 都可以。不需要 `sudo`、
+需要 macOS 11 以上、Rust 1.85 以上。Apple Silicon 和 Intel 都可以。不需要 `sudo`、
 不需要装驱动、不需要重启。
 
 ## 它到底能不能用

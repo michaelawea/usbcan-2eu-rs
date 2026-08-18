@@ -37,7 +37,7 @@ cargo build --release
 ./target/release/usbcan2eu send 123#DEADBEEF --bitrate 250k
 ```
 
-Requires macOS 11 or newer and Rust 1.75 or newer. Apple Silicon and Intel are
+Requires macOS 11 or newer and Rust 1.85 or newer. Apple Silicon and Intel are
 both fine. No `sudo`, no driver installation, no reboot.
 
 ## Does it actually work?

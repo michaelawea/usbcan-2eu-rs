@@ -18,9 +18,11 @@
 //! # Getting started
 //!
 //! ```no_run
+//! # // The transport is macOS-only, so this example is compiled only there.
+//! # #[cfg(target_os = "macos")]
+//! # fn example() -> Result<(), usbcan_2eu::Error> {
 //! use usbcan_2eu::{Bitrate, CanFrame, ChannelMode, Device};
 //!
-//! # fn main() -> Result<(), usbcan_2eu::Error> {
 //! let device = Device::open_first()?;
 //! device.start_channel(0, Bitrate::Kbps500, ChannelMode::Normal)?;
 //!
