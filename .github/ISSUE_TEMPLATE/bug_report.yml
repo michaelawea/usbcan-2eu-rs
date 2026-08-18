@@ -1,0 +1,69 @@
+name: Bug report
+description: Something does not work the way the documentation says it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, please check
+        [docs/troubleshooting.md](../blob/main/docs/troubleshooting.md) — it covers
+        the common cases and may answer this faster than we can.
+
+  - type: textarea
+    id: info
+    attributes:
+      label: usbcan2eu info
+      description: Full output, including the identification value and endpoint table.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: selftest
+    attributes:
+      label: usbcan2eu selftest
+      description: >
+        Output of `usbcan2eu selftest`, if you have a two-channel adapter. Say so
+        if the two channels are not wired together — the test cannot pass without
+        that, and knowing which case you are in matters.
+      render: text
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The command you ran with `-vv`, and what it did.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "26.5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: arch
+    attributes:
+      label: Machine
+      options: [Apple Silicon, Intel]
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Crate version or commit
+      placeholder: "0.1.0, or a commit hash"
+    validations:
+      required: true

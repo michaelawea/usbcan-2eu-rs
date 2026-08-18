@@ -1,0 +1,10 @@
+# Response to the identification probe (command 0x01, payload [0x01]).
+# Captured from a USBCAN-2E-U on endpoint 0x84.
+#
+# 7e   start of frame
+# 01   command echo
+# 02   payload length, bit 7 clear so the command succeeded
+# 00   reserved
+# 71 04  payload
+# 08   XOR checksum
+7e 01 02 00 71 04 08

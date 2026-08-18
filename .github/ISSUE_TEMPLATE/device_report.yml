@@ -1,0 +1,58 @@
+name: Device report
+description: Report how a particular adapter model behaves, whether or not it works
+labels: [hardware-report]
+title: "Device report: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Only the two-channel USBCAN-2E-U has been verified against real hardware.
+        Reports from any other model are genuinely useful — **including reports
+        that it does not work.** Thank you for taking the time.
+
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "USBCAN-E-U"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Works fully
+        - Works partly
+        - Does not work
+    validations:
+      required: true
+
+  - type: textarea
+    id: info
+    attributes:
+      label: usbcan2eu info
+      description: >
+        Full output. The endpoint table is the most likely place a different model
+        diverges, so please do not trim it.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: What you tried
+      description: >
+        Self test output if the unit has two channels; `usbcan2eu dump --bitrate
+        <rate> --status -vv` against a bus you know is running, if you have one.
+        Errors are as informative as successes.
+      render: text
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+    validations:
+      required: true

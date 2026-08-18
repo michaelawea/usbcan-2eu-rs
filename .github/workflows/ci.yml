@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # The full build, on the platform the transport targets.
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --all-features --all-targets -- -D warnings
+
+      - name: Tests
+        # Hardware tests are #[ignore]; CI has no adapter attached.
+        run: cargo test --all-features
+        env:
+          RUSTFLAGS: -D warnings
+
+      - name: Feature combinations
+        run: |
+          cargo check --no-default-features
+          cargo check --no-default-features --features serde
+          cargo check --no-default-features --features embedded-can
+          cargo check --no-default-features --features slcan
+
+      - name: Documentation
+        run: cargo doc --all-features --no-deps
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  # The protocol layer is platform-independent; keep it that way.
+  portability:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --all-features
+
+      - name: Protocol tests
+        run: cargo test --all-features
+
+  # The minimum supported Rust version stated in Cargo.toml must hold.
+  msrv:
+    name: MSRV
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75.0
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --all-features

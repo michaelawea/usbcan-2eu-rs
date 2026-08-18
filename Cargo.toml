@@ -1,0 +1,80 @@
+[package]
+name = "usbcan-2eu"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT OR Apache-2.0"
+description = "Unofficial userspace driver for ZLG USBCAN-E-U / USBCAN-2E-U CAN interfaces on macOS"
+repository = "https://github.com/michaelawea/usbcan-2eu-rs"
+documentation = "https://docs.rs/usbcan-2eu"
+readme = "README.md"
+keywords = ["can", "canbus", "usb", "driver", "slcan"]
+categories = ["hardware-support", "embedded"]
+exclude = ["/.github"]
+
+[dependencies]
+thiserror = "2"
+tracing = "0.1"
+
+embedded-can = { version = "0.4", optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+clap = { version = "4", features = ["derive"], optional = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"], optional = true }
+libc = { version = "0.2", optional = true }
+
+# macOS talks to the device through Apple's IOUSBHost framework rather than
+# libusb. See docs/macos-usb-isoc-kernel-bug.md for why.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = "0.3"
+objc2-core-foundation = "0.3"
+objc2-io-kit = "0.3"
+objc2-io-usb-host = "0.3"
+
+[features]
+default = ["cli"]
+# Command-line tool `usbcan2eu`. Library-only users should disable default
+# features to avoid pulling in clap.
+cli = ["dep:clap", "dep:tracing-subscriber", "slcan"]
+# SLCAN (Lawicel ASCII) bridge over a pseudo-terminal.
+slcan = ["dep:libc"]
+# `serde::Serialize` on the public data types.
+serde = ["dep:serde"]
+# `embedded_can::Frame` / `embedded_can::blocking::Can` implementations.
+embedded-can = ["dep:embedded-can"]
+
+[[bin]]
+name = "usbcan2eu"
+path = "src/bin/usbcan2eu.rs"
+required-features = ["cli"]
+
+[[example]]
+name = "list_devices"
+path = "examples/list_devices.rs"
+
+[[example]]
+name = "receive"
+path = "examples/receive.rs"
+
+[[example]]
+name = "transmit"
+path = "examples/transmit.rs"
+
+[[example]]
+name = "loopback"
+path = "examples/loopback.rs"
+
+[dev-dependencies]
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# device.rs is macOS-only; docs.rs builds on Linux and would otherwise render an
+# empty crate.
+[package.metadata.docs.rs]
+targets = ["aarch64-apple-darwin", "x86_64-apple-darwin"]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[profile.release]
+# A CAN receive loop benefits from this and the crate is small enough that the
+# extra link time does not matter.
+lto = "thin"

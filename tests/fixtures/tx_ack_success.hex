@@ -1,0 +1,9 @@
+# Transmit acknowledgement for a 4-byte frame on channel 0.
+# Captured from a USBCAN-2E-U on endpoint 0x82.
+#
+# 0e   accepted
+# 81   channel 0 marker
+# 04   DLC echo
+# 00   reserved
+# 8b   checksum
+0e 81 04 00 8b

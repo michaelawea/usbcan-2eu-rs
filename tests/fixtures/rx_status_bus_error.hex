@@ -1,0 +1,6 @@
+# A 0xE5 status record: bus error / error passive.
+# Captured from a USBCAN-2E-U on endpoint 0x85 while the adapter was the only
+# node on the bus, so nothing acknowledged its transmissions. A steady stream of
+# these is the signature of that condition.
+0f e5 03 00 86 fe c1 02 a2 01 00 00
+00 00 00 00 00 00 00 00 00 00 00 00
